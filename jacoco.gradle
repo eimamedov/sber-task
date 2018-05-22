@@ -4,6 +4,16 @@ jacoco {
     toolVersion = "$versions.jacoco"
 }
 
+android {
+    testOptions {
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+            }
+        }
+    }
+}
+
 project.afterEvaluate {
     // Grab all build types and product flavors
     def buildTypes = android.buildTypes.collect { type -> type.name }

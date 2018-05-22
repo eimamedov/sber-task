@@ -16,6 +16,8 @@ ext.versions = [
         junit                        : '4.12',
         assertj                      : '3.10.0',
         mockito                      : '2.18.3',
+        okhttp                       : '3.10.0',
+        robolectric                  : '4.0-alpha-2',
 
         espresso                     : '3.0.2',
         supportTestRunner            : '1.0.2',
@@ -36,6 +38,8 @@ ext.libraries = [
         junit                   : "junit:junit:$versions.junit",
         assertj                 : "org.assertj:assertj-core:$versions.assertj",
         mockito                 : "org.mockito:mockito-core:$versions.mockito",
+        mockWebServer           : "com.squareup.okhttp3:mockwebserver:$versions.okhttp",
+        robolectric             : "org.robolectric:robolectric:$versions.robolectric",
 
         supportTestRunner       : "com.android.support.test:runner:$versions.supportTestRunner",
         espressoCore            : "com.android.support.test.espresso:espresso-core:$versions.espresso"

@@ -6,14 +6,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import eim.yar.sbertask.data.entity.WeatherEntity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(MockitoJUnitRunner.class)
 public class WeatherEntityJsonMapperTest {
 
     private static final String JSON_RESPONSE_WEATHER_DATA = "{\"coord\":\n" +
@@ -53,7 +50,7 @@ public class WeatherEntityJsonMapperTest {
     }
 
     @Test
-    public void testTransformUserEntityNotValidResponse() {
+    public void testTransformWeatherEntityNotValidResponse() {
         expectedException.expect(JsonSyntaxException.class);
         weatherEntityJsonMapper.transformWeatherEntity("uncorrected");
     }
