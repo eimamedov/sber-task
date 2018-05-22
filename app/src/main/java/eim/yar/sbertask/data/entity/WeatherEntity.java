@@ -1,12 +1,12 @@
 
-package eim.yar.sbertask.data.model;
+package eim.yar.sbertask.data.entity;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 @SuppressWarnings("PMD.DataClass")
-public class WeatherCurrent {
+public class WeatherEntity {
 
     @SerializedName("coord")
     @Expose

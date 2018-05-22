@@ -1,5 +1,5 @@
 
-package eim.yar.sbertask.data.model;
+package eim.yar.sbertask.data.entity;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

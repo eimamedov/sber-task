@@ -54,6 +54,8 @@ dependencies {
     implementation libraries.gson
 
     testImplementation libraries.junit
+    testImplementation libraries.assertj
+    testImplementation libraries.mockito
 
     androidTestImplementation libraries.supportTestRunner
     androidTestImplementation libraries.espressoCore
