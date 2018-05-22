@@ -11,6 +11,8 @@ ext.versions = [
 
         supportLibs                  : '27.1.1',
 
+        gson                         : '2.8.2',
+
         junit                        : '4.12',
 
         espresso                     : '3.0.2',
@@ -26,6 +28,8 @@ ext.gradlePlugins = [
 ext.libraries = [
         supportAppCompat        : "com.android.support:appcompat-v7:$versions.supportLibs",
         supportDesign           : "com.android.support:design:$versions.supportLibs",
+
+        gson                    : "com.google.code.gson:gson:$versions.gson",
 
         junit                   : "junit:junit:$versions.junit",
 

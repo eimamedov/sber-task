@@ -1,7 +1,9 @@
-package eim.yar.sbertask;
+package eim.yar.sbertask.presentation.view.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import eim.yar.sbertask.R;
 
 /**
  * Main activity of the application.

@@ -51,6 +51,8 @@ dependencies {
     implementation libraries.supportAppCompat
     implementation libraries.supportDesign
 
+    implementation libraries.gson
+
     testImplementation libraries.junit
 
     androidTestImplementation libraries.supportTestRunner
