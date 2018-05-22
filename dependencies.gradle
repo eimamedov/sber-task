@@ -1,0 +1,34 @@
+ext.versions = [
+        code                         : 1,
+        name                         : '1.0',
+
+        minSdk                       : 15,
+        targetSdk                    : 27,
+        compileSdk                   : 27,
+        buildTools                   : '27.0.3',
+
+        androidGradlePlugin          : '3.1.2',
+
+        supportLibs                  : '27.1.1',
+
+        junit                        : '4.12',
+
+        espresso                     : '3.0.2',
+        supportTestRunner            : '1.0.2',
+
+        jacoco                       : '0.8.1',
+]
+
+ext.gradlePlugins = [
+        android          : "com.android.tools.build:gradle:$versions.androidGradlePlugin",
+]
+
+ext.libraries = [
+        supportAppCompat        : "com.android.support:appcompat-v7:$versions.supportLibs",
+        supportDesign           : "com.android.support:design:$versions.supportLibs",
+
+        junit                   : "junit:junit:$versions.junit",
+
+        supportTestRunner       : "com.android.support.test:runner:$versions.supportTestRunner",
+        espressoCore            : "com.android.support.test.espresso:espresso-core:$versions.espresso"
+]

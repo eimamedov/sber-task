@@ -1,0 +1,51 @@
+plugins.apply('pmd')
+
+pmd {
+    toolVersion = '6.1.0'
+}
+
+task pmd(type: Pmd) {
+    ignoreFailures = false
+    ruleSetFiles = files("${project.rootDir}/code_quality/pmd.xml")
+    ruleSets = []
+
+    source = fileTree('src/main/java')
+}
+
+plugins.apply('findbugs')
+
+task findbugs(type: FindBugs) {
+    ignoreFailures = false
+    effort = 'max'
+    reportLevel = 'low'
+    reports {
+        html.enabled = true
+        xml.enabled = false
+    }
+
+    classes = files("${project.projectDir}/build/intermediates/classes")
+    source = fileTree('src/main/java')
+
+    classpath = files()
+
+    excludeFilter = new File("${project.rootDir}/code_quality/findbugs-filter.xml")
+}
+
+plugins.apply('checkstyle')
+
+checkstyle {
+    toolVersion = '8.8'
+}
+
+task checkstyle(type: Checkstyle) {
+    configFile rootProject.file('checkstyle.xml')
+    configFile file("${project.rootDir}/code_quality/checkstyle.xml")
+
+    ignoreFailures false
+    showViolations true
+
+    source 'src'
+    include '**/*.java'
+
+    classpath = files()
+}

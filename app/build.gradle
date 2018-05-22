@@ -1,0 +1,58 @@
+apply plugin: 'com.android.application'
+apply from: '../code_quality/quality.gradle'
+apply from: '../jacoco.gradle'
+
+android {
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTools
+
+    defaultConfig {
+        applicationId "sbertask.eim.yar.sber_task"
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
+        versionCode versions.code
+        versionName versions.name
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    buildTypes {
+        debug {
+            versionNameSuffix "-DEBUG"
+            testCoverageEnabled = true
+            shrinkResources true
+            minifyEnabled true
+            useProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles fileTree('proguard').asList().toArray()
+        }
+        release {
+            shrinkResources true
+            minifyEnabled true
+            useProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles fileTree('proguard').asList().toArray()
+        }
+    }
+
+    lintOptions {
+        warningsAsErrors true
+        abortOnError true
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation libraries.supportAppCompat
+    implementation libraries.supportDesign
+
+    testImplementation libraries.junit
+
+    androidTestImplementation libraries.supportTestRunner
+    androidTestImplementation libraries.espressoCore
+}
