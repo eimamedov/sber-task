@@ -9,58 +9,89 @@ public class Main {
 
     @SerializedName("temp")
     @Expose
-    private double temp;
+    private Double temperature;
     @SerializedName("pressure")
     @Expose
-    private int pressure;
+    private Double pressure;
     @SerializedName("humidity")
     @Expose
-    private int humidity;
+    private Double humidity;
     @SerializedName("temp_min")
     @Expose
-    private double tempMin;
+    private Double temperatureMin;
     @SerializedName("temp_max")
     @Expose
-    private double tempMax;
+    private Double temperatureMax;
+    @SerializedName("sea_level")
+    @Expose
+    private Double seaLevel;
+    @SerializedName("grnd_level")
+    @Expose
+    private Double grndLevel;
 
-    public double getTemp() {
-        return temp;
+    public Main(Double temperature, Double pressure, Double humidity, Double temperatureMin,
+                Double temperatureMax) {
+        this.temperature = temperature;
+        this.pressure = pressure;
+        this.humidity = humidity;
+        this.temperatureMin = temperatureMin;
+        this.temperatureMax = temperatureMax;
     }
 
-    public void setTemp(double temp) {
-        this.temp = temp;
+    public Double getTemperature() {
+        return temperature;
     }
 
-    public int getPressure() {
+    public void setTemperature(Double temperature) {
+        this.temperature = temperature;
+    }
+
+    public Double getPressure() {
         return pressure;
     }
 
-    public void setPressure(int pressure) {
+    public void setPressure(Double pressure) {
         this.pressure = pressure;
     }
 
-    public int getHumidity() {
+    public Double getHumidity() {
         return humidity;
     }
 
-    public void setHumidity(int humidity) {
+    public void setHumidity(Double humidity) {
         this.humidity = humidity;
     }
 
-    public double getTempMin() {
-        return tempMin;
+    public Double getTemperatureMin() {
+        return temperatureMin;
     }
 
-    public void setTempMin(double tempMin) {
-        this.tempMin = tempMin;
+    public void setTemperatureMin(Double tempMin) {
+        this.temperatureMin = tempMin;
     }
 
-    public double getTempMax() {
-        return tempMax;
+    public Double getTemperatureMax() {
+        return temperatureMax;
     }
 
-    public void setTempMax(double tempMax) {
-        this.tempMax = tempMax;
+    public void setTemperatureMax(Double tempMax) {
+        this.temperatureMax = tempMax;
+    }
+
+    public Double getSeaLevel() {
+        return seaLevel;
+    }
+
+    public void setSeaLevel(Double seaLevel) {
+        this.seaLevel = seaLevel;
+    }
+
+    public Double getGrndLevel() {
+        return grndLevel;
+    }
+
+    public void setGrndLevel(Double grndLevel) {
+        this.grndLevel = grndLevel;
     }
 
 }

@@ -9,7 +9,7 @@ public class Weather {
 
     @SerializedName("id")
     @Expose
-    private int id;
+    private Integer id;
     @SerializedName("main")
     @Expose
     private String main;
@@ -20,11 +20,18 @@ public class Weather {
     @Expose
     private String icon;
 
-    public int getId() {
+    public Weather(Integer id, String main, String description, String icon) {
+        this.id = id;
+        this.main = main;
+        this.description = description;
+        this.icon = icon;
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -31,19 +31,19 @@ public class WeatherEntity {
     private Rain rain;
     @SerializedName("dt")
     @Expose
-    private int dt;
+    private Long dt;
     @SerializedName("sys")
     @Expose
     private Sys sys;
     @SerializedName("id")
     @Expose
-    private int id;
+    private Integer id;
     @SerializedName("name")
     @Expose
     private String name;
     @SerializedName("cod")
     @Expose
-    private int cod;
+    private Integer cod;
 
     public Coord getCoord() {
         return coord;
@@ -101,11 +101,11 @@ public class WeatherEntity {
         this.rain = rain;
     }
 
-    public int getDt() {
+    public Long getDt() {
         return dt;
     }
 
-    public void setDt(int dt) {
+    public void setDt(Long dt) {
         this.dt = dt;
     }
 
@@ -117,11 +117,11 @@ public class WeatherEntity {
         this.sys = sys;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -133,11 +133,11 @@ public class WeatherEntity {
         this.name = name;
     }
 
-    public int getCod() {
+    public Integer getCod() {
         return cod;
     }
 
-    public void setCod(int cod) {
+    public void setCod(Integer cod) {
         this.cod = cod;
     }
 

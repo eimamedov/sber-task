@@ -46,7 +46,7 @@ public class WeatherEntityJsonMapperTest {
                 .transformWeatherEntity(JSON_RESPONSE_WEATHER_DATA);
         assertThat(weatherEntity.getCod()).isEqualTo(200);
         assertThat(weatherEntity.getId()).isEqualTo(2172797);
-        assertThat(weatherEntity.getMain().getTemp()).isEqualTo(23.32);
+        assertThat(weatherEntity.getMain().getTemperature()).isEqualTo(23.32);
     }
 
     @Test

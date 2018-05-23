@@ -7,27 +7,32 @@ import com.google.gson.annotations.SerializedName;
 @SuppressWarnings("PMD.DataClass")
 public class Coord {
 
-    @SerializedName("lon")
-    @Expose
-    private double lon;
     @SerializedName("lat")
     @Expose
-    private double lat;
+    private Double lat;
+    @SerializedName("lon")
+    @Expose
+    private Double lon;
 
-    public double getLon() {
-        return lon;
-    }
-
-    public void setLon(double lon) {
+    public Coord(Double lat, Double lon) {
+        this.lat = lat;
         this.lon = lon;
     }
 
-    public double getLat() {
+    public Double getLat() {
         return lat;
     }
 
-    public void setLat(double lat) {
+    public void setLat(Double lat) {
         this.lat = lat;
+    }
+
+    public Double getLon() {
+        return lon;
+    }
+
+    public void setLon(Double lon) {
+        this.lon = lon;
     }
 
 }

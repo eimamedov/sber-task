@@ -9,68 +9,73 @@ public class Sys {
 
     @SerializedName("type")
     @Expose
-    private int type;
+    private Integer type;
     @SerializedName("id")
     @Expose
-    private int id;
+    private Integer id;
     @SerializedName("message")
     @Expose
-    private double message;
+    private Double message;
     @SerializedName("country")
     @Expose
-    private String country;
+    private String countryCode;
     @SerializedName("sunrise")
     @Expose
-    private int sunrise;
+    private Integer sunrise;
     @SerializedName("sunset")
     @Expose
-    private int sunset;
+    private Integer sunset;
 
-    public int getType() {
+    public Sys(Integer sunrise, Integer sunset) {
+        this.sunrise = sunrise;
+        this.sunset = sunset;
+    }
+
+    public Integer getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public double getMessage() {
+    public Double getMessage() {
         return message;
     }
 
-    public void setMessage(double message) {
+    public void setMessage(Double message) {
         this.message = message;
     }
 
-    public String getCountry() {
-        return country;
+    public String getCountryCode() {
+        return countryCode;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
     }
 
-    public int getSunrise() {
+    public Integer getSunrise() {
         return sunrise;
     }
 
-    public void setSunrise(int sunrise) {
+    public void setSunrise(Integer sunrise) {
         this.sunrise = sunrise;
     }
 
-    public int getSunset() {
+    public Integer getSunset() {
         return sunset;
     }
 
-    public void setSunset(int sunset) {
+    public void setSunset(Integer sunset) {
         this.sunset = sunset;
     }
 

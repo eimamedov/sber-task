@@ -9,13 +9,13 @@ public class Rain {
 
     @SerializedName("3h")
     @Expose
-    private int m3h;
+    private Double m3h;
 
-    public int get3h() {
+    public Double get3h() {
         return m3h;
     }
 
-    public void set3h(int m3h) {
+    public void set3h(Double m3h) {
         this.m3h = m3h;
     }
 
