@@ -21,7 +21,7 @@ public interface WeatherCurrentDataLoader {
      * Load current weather {@link WeatherEntity} data by geographic coordinates.
      * @param latitude latitude value
      * @param longitude longitude value
-     * @return an {@link WeatherEntity} with current weather data for specified city name
+     * @param weatherCurrentCallback an {@link WeatherCurrentCallback} to handle results
      */
     void loadCurrentWeatherByCoordinates(double latitude, double longitude,
                                          WeatherCurrentCallback weatherCurrentCallback);
