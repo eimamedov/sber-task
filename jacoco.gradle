@@ -44,6 +44,7 @@ project.afterEvaluate {
                                    '**/R$*.class',
                                    '**/BuildConfig.*',
                                    '**/eim/yar/sbertask/data/entity/*.*', //data model
+                                   '**/eim/yar/sbertask/data/exception/*.*', //exceptions
                                    '**/Manifest*.*']
                 )
 
