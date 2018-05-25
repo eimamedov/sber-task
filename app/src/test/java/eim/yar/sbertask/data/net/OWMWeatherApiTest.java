@@ -1,5 +1,9 @@
 package eim.yar.sbertask.data.net;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -7,10 +11,13 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.shadows.ShadowApplication;
+import org.robolectric.shadows.ShadowNetworkInfo;
 
 import eim.yar.sbertask.data.entity.WeatherEntity;
 import eim.yar.sbertask.data.entity.mapper.WeatherEntityJsonMapper;
+import eim.yar.sbertask.data.exception.NetworkConnectionException;
 import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
@@ -18,6 +25,7 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 public class OWMWeatherApiTest {
@@ -47,11 +55,15 @@ public class OWMWeatherApiTest {
 
     private HttpUrl baseUrl;
 
+    private ConnectivityManager connectivityManager;
+
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
     @Before
     public void setUp() throws Exception {
+        connectivityManager = (ConnectivityManager) RuntimeEnvironment
+                .application.getSystemService(Context.CONNECTIVITY_SERVICE);
         server = new MockWebServer();
         server.start();
         final Dispatcher dispatcher = new Dispatcher() {
@@ -106,6 +118,44 @@ public class OWMWeatherApiTest {
         OWMWeatherApi weatherApi = new OWMWeatherApi(ShadowApplication.getInstance()
                 .getApplicationContext(), new WeatherEntityJsonMapper());
         weatherApi.getCurrentWeatherByCoordinates(TEST_LATITUDE, TEST_LONGITUDE, null);
+    }
+
+    @Test
+    public void testOWMWeatherApiDisconnectedState() {
+        ShadowNetworkInfo shadowOfActiveNetworkInfo =
+                shadowOf(connectivityManager.getActiveNetworkInfo());
+        shadowOfActiveNetworkInfo.setConnectionStatus(NetworkInfo.State.DISCONNECTED);
+        OWMWeatherApi weatherApi = new OWMWeatherApi(ShadowApplication.getInstance()
+                .getApplicationContext(), new WeatherEntityJsonMapper(), baseUrl.toString());
+        weatherApi.getCurrentWeatherByCoordinates(TEST_LATITUDE, TEST_LONGITUDE,
+                new WeahterApi.WeatherCurrentCallback() {
+                    @Override
+                    public void onWeatherEntityLoaded(WeatherEntity weatherEntity) {
+                    }
+
+                    @Override
+                    public void onError(Exception exception) {
+                        assertThat(exception.getMessage()).isEqualToIgnoringCase(
+                                "There is no internet connection");
+                    }
+                });
+    }
+
+    @Test
+    public void testOWMWeatherApiWrongUrl() {
+        OWMWeatherApi weatherApi = new OWMWeatherApi(ShadowApplication.getInstance()
+                .getApplicationContext(), new WeatherEntityJsonMapper(), "/");
+        weatherApi.getCurrentWeatherByCoordinates(TEST_LATITUDE, TEST_LONGITUDE,
+                new WeahterApi.WeatherCurrentCallback() {
+                    @Override
+                    public void onWeatherEntityLoaded(WeatherEntity weatherEntity) {
+                    }
+
+                    @Override
+                    public void onError(Exception exception) {
+                        assertThat(exception).isInstanceOf(NetworkConnectionException.class);
+                    }
+                });
     }
 
     @After

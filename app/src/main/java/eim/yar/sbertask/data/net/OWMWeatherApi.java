@@ -92,7 +92,8 @@ public class OWMWeatherApi implements WeahterApi {
                 weatherCallback.onError(new NetworkConnectionException(exception.getCause()));
             }
         } else {
-            weatherCallback.onError(new NetworkConnectionException());
+            weatherCallback.onError(new NetworkConnectionException(
+                    "There is no internet connection"));
         }
     }
 
