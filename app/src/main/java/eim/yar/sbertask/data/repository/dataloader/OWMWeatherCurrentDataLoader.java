@@ -1,6 +1,7 @@
 package eim.yar.sbertask.data.repository.dataloader;
 
 import eim.yar.sbertask.data.entity.WeatherEntity;
+import eim.yar.sbertask.data.net.OWMWeatherApi;
 import eim.yar.sbertask.data.net.WeahterApi;
 
 /**
@@ -15,9 +16,9 @@ public class OWMWeatherCurrentDataLoader implements WeatherCurrentDataLoader {
 
     /**
      * Construct a {@link OWMWeatherCurrentDataLoader}
-     * @param weahterApi object to work with weather api
+     * @param weahterApi object to work with OpenWeatherMap api
      */
-    public OWMWeatherCurrentDataLoader(WeahterApi weahterApi) {
+    public OWMWeatherCurrentDataLoader(OWMWeatherApi weahterApi) {
         this.weahterApi = weahterApi;
     }
 

@@ -9,6 +9,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import eim.yar.sbertask.data.entity.Main;
 import eim.yar.sbertask.data.entity.WeatherEntity;
 import eim.yar.sbertask.data.exception.NetworkConnectionException;
+import eim.yar.sbertask.data.net.OWMWeatherApi;
 import eim.yar.sbertask.data.net.WeahterApi;
 
 import static org.mockito.Mockito.doAnswer;
@@ -20,7 +21,7 @@ public class OWMWeatherCurrentDataLoaderTest {
 
     private static final String EXCEPTION_TEST_MESSAGE = "Test message";
 
-    @Mock private WeahterApi weahterApi;
+    @Mock private OWMWeatherApi weahterApi;
 
     private OWMWeatherCurrentDataLoader weatherCurrentDataLoader;
 

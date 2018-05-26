@@ -103,6 +103,9 @@ public class FineCurrentLocationProvider implements CurrentLocationProvider {
      * @param context application context
      */
     public FineCurrentLocationProvider(Context context) {
+        if (context == null) {
+            throw new IllegalArgumentException("The constructor parameters cannot be null!");
+        }
         this.context = context.getApplicationContext();
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         initCriteria();
@@ -122,6 +125,9 @@ public class FineCurrentLocationProvider implements CurrentLocationProvider {
 
     @Override
     public void findCurrentLocation(CurrentLocationCallback currentLocationCallback) {
+        if (currentLocationCallback == null) {
+            throw new IllegalArgumentException("Callback cannot be null!");
+        }
         locationManager.removeUpdates(locationListener);
         handler.removeCallbacksAndMessages(null);
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)

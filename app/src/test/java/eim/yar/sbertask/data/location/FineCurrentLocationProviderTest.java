@@ -4,7 +4,9 @@ import android.Manifest;
 import android.location.Location;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
@@ -16,6 +18,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FineCurrentLocationProviderTest {
 
     private FineCurrentLocationProvider locationProvider;
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     @Before
     public void setUp() {
@@ -37,7 +42,7 @@ public class FineCurrentLocationProviderTest {
     }
 
     @Test
-    public void testFineCurrentLocationProviderHNoPermission() {
+    public void testFineCurrentLocationProviderNoPermission() {
         ShadowApplication.getInstance().denyPermissions(Manifest.permission.ACCESS_FINE_LOCATION);
         locationProvider.findCurrentLocation(new CurrentLocationProvider.CurrentLocationCallback() {
             @Override
@@ -50,6 +55,18 @@ public class FineCurrentLocationProviderTest {
                         "Fine location permission is not granted");
             }
         });
+    }
+
+    @Test
+    public void testFineCurrentLocationProviderNullContext() {
+        expectedException.expect(IllegalArgumentException.class);
+        new FineCurrentLocationProvider(null);
+    }
+
+    @Test
+    public void testFineCurrentLocationProviderNullCallback() {
+        expectedException.expect(IllegalArgumentException.class);
+        locationProvider.findCurrentLocation(null);
     }
 
 }
