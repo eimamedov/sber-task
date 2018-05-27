@@ -2,12 +2,10 @@ package eim.yar.sbertask.data.repository.locationhelper;
 
 import android.location.Location;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 
@@ -86,10 +84,5 @@ public class FineLocationHelperTest {
                                 .isEqualToIgnoringCase(EXCEPTION_TEST_MESSAGE);
                     }
                 });
-    }
-
-    @After
-    public void tearDownMockito() {
-        Mockito.validateMockitoUsage();
     }
 }

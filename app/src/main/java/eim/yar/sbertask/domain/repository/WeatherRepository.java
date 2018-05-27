@@ -12,17 +12,14 @@ public interface WeatherRepository {
      * an error happened.
      */
     interface WeatherCurrentCallback {
-        void onWeatherEntityLoaded(WeatherCurrent weatherCurrent);
+        void onCurrentWeatherLoaded(WeatherCurrent weatherCurrent);
 
         void onError(Exception exception);
     }
 
     /**
-     * Get an {@link WeatherCurrent} by specified location.
-     * @param latitude latitude value
-     * @param longitude longitude value
+     * Get an {@link WeatherCurrent} for current location.
      * @param weatherCurrentCallback an {@link WeatherCurrentCallback} to handle results
      */
-    void getCurrentWeatherByCoordinates(double latitude, double longitude,
-                     WeatherCurrentCallback weatherCurrentCallback);
+    void getCurrentWeatherForCurrentLocation(WeatherCurrentCallback weatherCurrentCallback);
 }
