@@ -1,11 +1,9 @@
 package eim.yar.sbertask.data.repository;
 
-import android.location.Location;
 import android.support.annotation.NonNull;
 
 import eim.yar.sbertask.data.entity.WeatherEntity;
 import eim.yar.sbertask.data.entity.mapper.WeatherEntityDataMapper;
-import eim.yar.sbertask.data.exception.WeatherNotFoundException;
 import eim.yar.sbertask.data.repository.dataloader.WeatherCurrentDataLoader;
 import eim.yar.sbertask.data.repository.locationhelper.LocationHelper;
 import eim.yar.sbertask.domain.model.WeatherCurrent;
@@ -27,16 +25,9 @@ public class WeatherDataRepository implements WeatherRepository {
     final LocationHelper locationHelper;
 
     /**
-     * Object to transform a {@link eim.yar.sbertask.data.entity.WeatherEntity} objects
-     * into an {@link eim.yar.sbertask.domain.model.WeatherCurrent} objects.
+     * Object to transform a {@link WeatherEntity} objects into an {@link WeatherCurrent} objects.
      */
     final WeatherEntityDataMapper dataMapper;
-
-    /**
-     * Callback used to be notified when either a current weather data for current location
-     * has been loaded or an error happened.
-     */
-    WeatherCurrentCallback weatherCurrentForCurrentLocationCallback;
 
     /**
      * Constructs a {@link WeatherRepository}.
@@ -54,58 +45,9 @@ public class WeatherDataRepository implements WeatherRepository {
     @Override
     public void getCurrentWeatherForCurrentLocation(
             @NonNull final WeatherCurrentCallback weatherCurrentCallback) {
-        weatherCurrentForCurrentLocationCallback = weatherCurrentCallback;
-        locationHelper.getCurrentLocation(currentWeatherCurrentLocationCallback);
+        CurrentWeatherCurrentLocationCallback locationCallback =
+                new CurrentWeatherCurrentLocationCallback(weatherCurrentDataLoader,
+                        weatherCurrentCallback, dataMapper);
+        locationHelper.getCurrentLocation(locationCallback);
     }
-
-    /**
-     * Current location callback used to get current weather data for current location.
-     */
-    final LocationHelper.CurrentLocationCallback currentWeatherCurrentLocationCallback =
-            new LocationHelper.CurrentLocationCallback() {
-                @Override
-                public void onCurrentLocationFound(Location currentLocation) {
-                    weatherCurrentDataLoader.loadCurrentWeatherByCoordinates(
-                            currentLocation.getLatitude(), currentLocation.getLongitude(),
-                            currentWeatherCurrentLocationDataLoaderCallback);
-                }
-
-                @Override
-                public void onError(Exception exception) {
-                    if (weatherCurrentForCurrentLocationCallback != null) {
-                        weatherCurrentForCurrentLocationCallback.onError(exception);
-                        weatherCurrentForCurrentLocationCallback = null;
-                    }
-                }
-            };
-
-    /**
-     * Current weather callback used to get current weather data for current location.
-     */
-    final WeatherCurrentDataLoader.WeatherCurrentCallback
-            currentWeatherCurrentLocationDataLoaderCallback =
-            new WeatherCurrentDataLoader.WeatherCurrentCallback() {
-                @Override
-                public void onWeatherEntityLoaded(WeatherEntity weatherEntity) {
-                    if (weatherCurrentForCurrentLocationCallback != null) {
-                        WeatherCurrent weatherCurrent = dataMapper.transform(weatherEntity);
-                        if (weatherCurrent == null) {
-                            weatherCurrentForCurrentLocationCallback.onError(
-                                    new WeatherNotFoundException("Weather data not found"));
-                        } else {
-                            weatherCurrentForCurrentLocationCallback
-                                    .onCurrentWeatherLoaded(weatherCurrent);
-                        }
-                        weatherCurrentForCurrentLocationCallback = null;
-                    }
-                }
-
-                @Override
-                public void onError(Exception exception) {
-                    if (weatherCurrentForCurrentLocationCallback != null) {
-                        weatherCurrentForCurrentLocationCallback.onError(exception);
-                        weatherCurrentForCurrentLocationCallback = null;
-                    }
-                }
-            };
 }
