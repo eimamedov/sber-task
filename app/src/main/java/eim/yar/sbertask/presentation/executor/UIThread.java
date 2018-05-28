@@ -6,8 +6,8 @@ import android.os.Looper;
 import eim.yar.sbertask.domain.executor.PostExecutionThread;
 
 /**
- * MainThread (UI Thread) implementation based on a Handler instantiated with the main
- * application Looper.
+ * {@link PostExecutionThread} implementation. MainThread (UI Thread) implementation based on
+ * a Handler instantiated with the main application Looper.
  */
 public class UIThread implements PostExecutionThread {
 

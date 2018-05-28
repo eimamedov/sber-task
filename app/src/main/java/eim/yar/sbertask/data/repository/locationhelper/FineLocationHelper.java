@@ -1,6 +1,5 @@
 package eim.yar.sbertask.data.repository.locationhelper;
 
-
 import android.location.Location;
 
 import eim.yar.sbertask.data.location.CurrentLocationProvider;

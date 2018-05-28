@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import eim.yar.sbertask.domain.executor.ThreadExecutor;
 
 /**
+ * {@link ThreadExecutor} implementation based on {@link ThreadPoolExecutor}.
  * Decorated {@link java.util.concurrent.ThreadPoolExecutor} Singleton class based on
  * 'Initialization on Demand Holder' pattern.
  */
@@ -23,7 +24,7 @@ public class JobExecutor implements ThreadExecutor {
     private static final int MAX_POOL_SIZE = 5;
 
     /**
-     * Amount of time an idle thread waits before terminating
+     * Amount of time an idle thread waits before terminating.
      */
     private static final int KEEP_ALIVE_TIME = 10;
 

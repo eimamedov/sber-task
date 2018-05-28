@@ -43,8 +43,9 @@ project.afterEvaluate {
                         excludes: ['**/R.class',
                                    '**/R$*.class',
                                    '**/BuildConfig.*',
-                                   '**/eim/yar/sbertask/data/entity/*.*', //data model
-                                   '**/eim/yar/sbertask/data/exception/*.*', //exceptions
+                                   '**/eim/yar/sbertask/data/entity/*.*', // data model
+                                   '**/eim/yar/sbertask/data/exception/*.*', // exceptions
+                                   '**/eim/yar/sbertask/data/executor/*.*', // executors
                                    '**/Manifest*.*']
                 )
 
