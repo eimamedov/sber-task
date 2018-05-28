@@ -21,7 +21,7 @@ public class JobExecutor implements ThreadExecutor {
     /**
      * Maximum number of threads to allow in the pool.
      */
-    private static final int MAX_POOL_SIZE = 5;
+    private static final int MAX_POOL_SIZE = 6;
 
     /**
      * Amount of time an idle thread waits before terminating.

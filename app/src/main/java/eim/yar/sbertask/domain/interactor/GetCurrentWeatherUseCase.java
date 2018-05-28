@@ -47,6 +47,7 @@ public abstract class GetCurrentWeatherUseCase {
         this.weatherRepository = weatherRepository;
         this.threadExecutor = threadExecutor;
         this.postExecutionThread = postExecutionThread;
+        callback = null;
     }
 
     /**

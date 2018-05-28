@@ -1,6 +1,6 @@
 package eim.yar.sbertask.data.repository.locationhelper;
 
-import android.location.Location;
+import java.util.concurrent.Executors;
 
 import eim.yar.sbertask.data.location.CurrentLocationProvider;
 import eim.yar.sbertask.data.location.FineCurrentLocationProvider;
@@ -25,17 +25,25 @@ public class FineLocationHelper implements LocationHelper {
 
     @Override
     public void getCurrentLocation(final CurrentLocationCallback currentLocationCallback) {
-        currentLocationProvider.findCurrentLocation(
-                new CurrentLocationProvider.CurrentLocationCallback() {
-            @Override
-            public void onCurrentLocationFound(Location currentLocation) {
-                currentLocationCallback.onCurrentLocationFound(currentLocation);
-            }
-
-            @Override
-            public void onError(Exception exception) {
+        CurrentLocationProviderData currentLocationProviderData = new CurrentLocationProviderData();
+        synchronized (currentLocationProviderData) {
+            try {
+                CurrentLocationLooperTask looperTask = new CurrentLocationLooperTask(
+                        currentLocationProvider, currentLocationProviderData);
+                Executors.defaultThreadFactory().newThread(looperTask).start();
+                while (currentLocationProviderData.getCurrentLocation() == null &&
+                        currentLocationProviderData.getException() == null) {
+                    currentLocationProviderData.wait();
+                }
+                if (currentLocationProviderData.getCurrentLocation() == null) {
+                    currentLocationCallback.onError(currentLocationProviderData.getException());
+                } else {
+                    currentLocationCallback.onCurrentLocationFound(
+                            currentLocationProviderData.getCurrentLocation());
+                }
+            } catch (InterruptedException exception) {
                 currentLocationCallback.onError(exception);
             }
-        });
+        }
     }
 }

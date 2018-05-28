@@ -24,16 +24,6 @@ public class FineCurrentLocationProvider implements CurrentLocationProvider {
     private static final int LOCATION_REQUEST_DURATION = 10000;
 
     /**
-     * Handler to post task for request timeout finish.
-     */
-    final Handler handler = new Handler();
-
-    /**
-     * Callback to handle location request results.
-     */
-    CurrentLocationCallback currentLocationCallback;
-
-    /**
      * Criteria for selecting a location provider.
      */
     private Criteria criteria;
@@ -51,52 +41,53 @@ public class FineCurrentLocationProvider implements CurrentLocationProvider {
     /**
      * Listener to handle location requests.
      */
-    final LocationListener locationListener = new LocationListener() {
+    private LocationListener createLocationListener(final Handler handler,
+            final CurrentLocationCallback currentLocationCallback) {
+        return new LocationListener() {
 
-        @Override
-        public void onLocationChanged(Location location) {
-            handler.removeCallbacksAndMessages(null);
-            if (currentLocationCallback != null) {
-                if (location == null) {
-                    currentLocationCallback.onError(new LocationDeterminationException(
-                            "Current location is not found"));
-                } else {
-                    currentLocationCallback.onCurrentLocationFound(location);
+            @Override
+            public void onLocationChanged(Location location) {
+                handler.removeCallbacksAndMessages(null);
+                if (currentLocationCallback != null) {
+                    if (location == null) {
+                        currentLocationCallback.onError(new LocationDeterminationException(
+                                "Current location is not found"));
+                    } else {
+                        currentLocationCallback.onCurrentLocationFound(location);
+                    }
                 }
             }
-            currentLocationCallback = null;
-        }
 
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-            // empty
-        }
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+                // empty
+            }
 
-        @Override
-        public void onProviderEnabled(String provider) {
-            // empty
-        }
+            @Override
+            public void onProviderEnabled(String provider) {
+                // empty
+            }
 
-        @Override
-        public void onProviderDisabled(String provider) {
-            // empty
-        }
-    };
+            @Override
+            public void onProviderDisabled(String provider) {
+                // empty
+            }
+        };
+    }
 
     /**
      * Runnable object to emit location error when request timeout duration is finished.
      */
-    Runnable requestTimeoutFinishedRunnable = new Runnable() {
-        @Override
-        public void run() {
+    private Runnable createRequestTimeoutFinishedRunnable(final LocationListener locationListener,
+            final CurrentLocationCallback currentLocationCallback) {
+        return () -> {
             locationManager.removeUpdates(locationListener);
             if (currentLocationCallback != null) {
                 currentLocationCallback.onError(new LocationDeterminationException(
                         "Location request timeout is finished"));
-                currentLocationCallback = null;
             }
-        }
-    };
+        };
+    }
 
     /**
      * Construct a {@link FineCurrentLocationProvider}.
@@ -128,12 +119,13 @@ public class FineCurrentLocationProvider implements CurrentLocationProvider {
         if (currentLocationCallback == null) {
             throw new IllegalArgumentException("Callback cannot be null!");
         }
-        locationManager.removeUpdates(locationListener);
-        handler.removeCallbacksAndMessages(null);
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-            this.currentLocationCallback = currentLocationCallback;
-            handler.postDelayed(requestTimeoutFinishedRunnable, LOCATION_REQUEST_DURATION);
+            final Handler handler = new Handler();
+            final LocationListener locationListener = createLocationListener(handler,
+                    currentLocationCallback);
+            handler.postDelayed(createRequestTimeoutFinishedRunnable(locationListener,
+                    currentLocationCallback), LOCATION_REQUEST_DURATION);
             locationManager.requestSingleUpdate(criteria, locationListener, null);
         } else {
             currentLocationCallback.onError(new LocationDeterminationException(
