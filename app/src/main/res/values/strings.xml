@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">sber-task</string>
+    <string name="app_name">Current Weather</string>
+    <string name="for_current_location">For current location</string>
 </resources>
