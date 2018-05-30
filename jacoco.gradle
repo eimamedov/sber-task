@@ -46,6 +46,10 @@ project.afterEvaluate {
                                    '**/eim/yar/sbertask/data/entity/*.*', // data model
                                    '**/eim/yar/sbertask/data/exception/*.*', // exceptions
                                    '**/eim/yar/sbertask/data/executor/*.*', // executors
+                                   '**/eim/yar/sbertask/databinding/*.*', // data binding
+                                   '**/com/android/databinding/library/baseAdapters/*.*', // data binding
+                                   '**/android/databinding/layouts/*.*', // data binding
+                                   '**/android/databinding/*.*', // data binding
                                    '**/Manifest*.*']
                 )
 
