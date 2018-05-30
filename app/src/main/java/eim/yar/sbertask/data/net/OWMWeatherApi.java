@@ -11,10 +11,10 @@ import eim.yar.sbertask.data.entity.mapper.WeatherEntityJsonMapper;
 import eim.yar.sbertask.data.exception.NetworkConnectionException;
 
 /**
- * {@link WeahterApi} implementation for retrieving data from the network
+ * {@link WeatherApi} implementation for retrieving data from the network
  * base on OpenWeatherMap api.
  */
-public class OWMWeatherApi implements WeahterApi {
+public class OWMWeatherApi implements WeatherApi {
 
     /**
      * OpenWeatherMap api key.

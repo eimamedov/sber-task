@@ -86,7 +86,7 @@ public class OWMWeatherApiTest {
         OWMWeatherApi weatherApi = new OWMWeatherApi(ShadowApplication.getInstance()
                 .getApplicationContext(), new WeatherEntityJsonMapper(), baseUrl.toString());
         weatherApi.getCurrentWeatherByCoordinates(TEST_LATITUDE, TEST_LONGITUDE,
-                new WeahterApi.WeatherCurrentCallback() {
+                new WeatherApi.WeatherCurrentCallback() {
             @Override
             public void onWeatherEntityLoaded(WeatherEntity weatherEntity) {
                 assertThat(weatherEntity.getCod()).isEqualTo(200);
@@ -128,7 +128,7 @@ public class OWMWeatherApiTest {
         OWMWeatherApi weatherApi = new OWMWeatherApi(ShadowApplication.getInstance()
                 .getApplicationContext(), new WeatherEntityJsonMapper(), baseUrl.toString());
         weatherApi.getCurrentWeatherByCoordinates(TEST_LATITUDE, TEST_LONGITUDE,
-                new WeahterApi.WeatherCurrentCallback() {
+                new WeatherApi.WeatherCurrentCallback() {
                     @Override
                     public void onWeatherEntityLoaded(WeatherEntity weatherEntity) {
                     }
@@ -146,7 +146,7 @@ public class OWMWeatherApiTest {
         OWMWeatherApi weatherApi = new OWMWeatherApi(ShadowApplication.getInstance()
                 .getApplicationContext(), new WeatherEntityJsonMapper(), "/");
         weatherApi.getCurrentWeatherByCoordinates(TEST_LATITUDE, TEST_LONGITUDE,
-                new WeahterApi.WeatherCurrentCallback() {
+                new WeatherApi.WeatherCurrentCallback() {
                     @Override
                     public void onWeatherEntityLoaded(WeatherEntity weatherEntity) {
                     }

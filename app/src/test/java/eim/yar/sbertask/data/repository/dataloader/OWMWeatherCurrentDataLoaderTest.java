@@ -10,7 +10,7 @@ import eim.yar.sbertask.data.entity.Main;
 import eim.yar.sbertask.data.entity.WeatherEntity;
 import eim.yar.sbertask.data.exception.NetworkConnectionException;
 import eim.yar.sbertask.data.net.OWMWeatherApi;
-import eim.yar.sbertask.data.net.WeahterApi;
+import eim.yar.sbertask.data.net.WeatherApi;
 
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.ArgumentMatchers.any;
@@ -39,11 +39,11 @@ public class OWMWeatherCurrentDataLoaderTest {
     @Test
     public void testOWMWeatherCurrentDataLoaderHappyCase() {
         doAnswer(invocation -> {
-            ((WeahterApi.WeatherCurrentCallback) invocation.getArguments()[2])
+            ((WeatherApi.WeatherCurrentCallback) invocation.getArguments()[2])
                     .onWeatherEntityLoaded(testWeatherEntity);
             return null;
         }).when(weahterApi).getCurrentWeatherByCoordinates(any(Double.class), any(Double.class),
-                any(WeahterApi.WeatherCurrentCallback.class));
+                any(WeatherApi.WeatherCurrentCallback.class));
         weatherCurrentDataLoader.loadCurrentWeatherByCoordinates(1, 2,
                 new WeatherCurrentDataLoader.WeatherCurrentCallback() {
                     @Override
@@ -63,11 +63,11 @@ public class OWMWeatherCurrentDataLoaderTest {
     @Test
     public void testOWMWeatherCurrentDataLoaderError() {
         doAnswer(invocation -> {
-            ((WeahterApi.WeatherCurrentCallback) invocation.getArguments()[2])
+            ((WeatherApi.WeatherCurrentCallback) invocation.getArguments()[2])
                     .onError(new NetworkConnectionException(EXCEPTION_TEST_MESSAGE));
             return null;
         }).when(weahterApi).getCurrentWeatherByCoordinates(any(Double.class), any(Double.class),
-                any(WeahterApi.WeatherCurrentCallback.class));
+                any(WeatherApi.WeatherCurrentCallback.class));
         weatherCurrentDataLoader.loadCurrentWeatherByCoordinates(1, 2,
                 new WeatherCurrentDataLoader.WeatherCurrentCallback() {
                     @Override

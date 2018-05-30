@@ -5,7 +5,7 @@ import eim.yar.sbertask.data.entity.WeatherEntity;
 /**
  * WeatherApi for retrieving weather data from the network.
  */
-public interface WeahterApi {
+public interface WeatherApi {
 
     /**
      * Callback to be notified when getting a current weather data from the network.
