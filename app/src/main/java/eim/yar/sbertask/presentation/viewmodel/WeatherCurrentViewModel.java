@@ -66,7 +66,7 @@ public class WeatherCurrentViewModel {
         return error;
     }
 
-    public void onRefreshClicked(View view) {
+    public void onForCurrentLocationClick() {
         progressVisibility.set(View.VISIBLE);
         currentWeatherForCurrentLocationUseCase.execute(
             new GetCurrentWeatherUseCase.Callback() {

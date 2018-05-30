@@ -21,7 +21,7 @@ public class FineCurrentLocationProvider implements CurrentLocationProvider {
     /**
      * Location request expiration duration in milliseconds.
      */
-    private static final int LOCATION_REQUEST_DURATION = 10000;
+    private static final int LOCATION_REQUEST_DURATION = 20000;
 
     /**
      * Criteria for selecting a location provider.
