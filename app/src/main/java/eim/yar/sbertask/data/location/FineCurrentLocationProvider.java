@@ -7,9 +7,13 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
+
+import java.util.concurrent.TimeUnit;
 
 import eim.yar.sbertask.data.exception.LocationDeterminationException;
 
@@ -21,7 +25,7 @@ public class FineCurrentLocationProvider implements CurrentLocationProvider {
     /**
      * Location request expiration duration in milliseconds.
      */
-    private static final int LOCATION_REQUEST_DURATION = 20000;
+    private static final int LOCATION_REQUEST_DURATION = 30000;
 
     /**
      * Criteria for selecting a location provider.
@@ -114,6 +118,31 @@ public class FineCurrentLocationProvider implements CurrentLocationProvider {
         criteria.setSpeedRequired(false);
     }
 
+    public Criteria getCriteria() {
+        return criteria;
+    }
+
+    /**
+     * Check is given location was updated recently.
+     * @param location location to check
+     * @return true if location was updated recently
+     */
+    private boolean isFreshLocation(Location location) {
+        if (location == null) {
+            return false;
+        } else {
+            long diff;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                diff = TimeUnit.MILLISECONDS.convert(SystemClock.elapsedRealtimeNanos(),
+                        TimeUnit.NANOSECONDS) - TimeUnit.MILLISECONDS.convert(location
+                        .getElapsedRealtimeNanos(), TimeUnit.NANOSECONDS);
+            } else {
+                diff = System.currentTimeMillis() - location.getTime();
+            }
+            return diff < 60000;
+        }
+    }
+
     @Override
     public void findCurrentLocation(CurrentLocationCallback currentLocationCallback) {
         if (currentLocationCallback == null) {
@@ -121,12 +150,18 @@ public class FineCurrentLocationProvider implements CurrentLocationProvider {
         }
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-            final Handler handler = new Handler();
-            final LocationListener locationListener = createLocationListener(handler,
-                    currentLocationCallback);
-            handler.postDelayed(createRequestTimeoutFinishedRunnable(locationListener,
-                    currentLocationCallback), LOCATION_REQUEST_DURATION);
-            locationManager.requestSingleUpdate(criteria, locationListener, null);
+            Location lastLocation = locationManager.getLastKnownLocation(
+                    locationManager.getBestProvider(criteria, true));
+            if (isFreshLocation(lastLocation)) {
+                currentLocationCallback.onCurrentLocationFound(lastLocation);
+            } else {
+                final Handler handler = new Handler();
+                final LocationListener locationListener = createLocationListener(handler,
+                        currentLocationCallback);
+                handler.postDelayed(createRequestTimeoutFinishedRunnable(locationListener,
+                        currentLocationCallback), LOCATION_REQUEST_DURATION);
+                locationManager.requestSingleUpdate(criteria, locationListener, null);
+            }
         } else {
             currentLocationCallback.onError(new LocationDeterminationException(
                     "Fine location permission is not granted"));
