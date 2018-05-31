@@ -1,5 +1,6 @@
 package eim.yar.sbertask.data.repository;
 
+import android.location.Address;
 import android.location.Location;
 
 import org.junit.Before;
@@ -8,6 +9,10 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import eim.yar.sbertask.data.entity.Coord;
 import eim.yar.sbertask.data.entity.Main;
@@ -38,6 +43,14 @@ public class WeatherDataRepositoryTest {
     private static final double TEST_LONGITUDE = 2.5;
 
     private static final String TEST_NAME = "TEST_NAME";
+
+    private static final String TEST_COUNTRY_NAME = "Test country";
+
+    private static final String TEST_ADMIN_AREA = "Test area";
+
+    private static final String TEST_SUB_ADMIN_AREA = "Test subarea";
+
+    private static final String TEST_LOCALITY = "Test locality";
 
     @Mock private WeatherCurrentDataLoader dataLoader;
 
@@ -79,6 +92,57 @@ public class WeatherDataRepositoryTest {
             return null;
         }).when(dataLoader).loadCurrentWeatherByCoordinates(eq(TEST_LATITUDE), eq(TEST_LONGITUDE),
                 any(WeatherCurrentDataLoader.WeatherCurrentCallback.class));
+        Address address = new Address(Locale.getDefault());
+        address.setCountryName(TEST_COUNTRY_NAME);
+        address.setAdminArea(TEST_ADMIN_AREA);
+        address.setSubAdminArea(TEST_SUB_ADMIN_AREA);
+        address.setLocality(TEST_LOCALITY);
+        List<Address> addresses = new ArrayList<>();
+        addresses.add(address);
+        doAnswer(invocation -> {
+            ((LocationHelper.ReverseGeocodeCallback) invocation.getArguments()[1])
+                    .onReverseGeocodeFound(addresses);
+            return null;
+        }).when(locationHelper).reverseGeocode(any(Location.class),
+                any(LocationHelper.ReverseGeocodeCallback.class));
+        repository.getCurrentWeatherForCurrentLocation(
+                new WeatherRepository.WeatherCurrentCallback() {
+                    @Override
+                    public void onCurrentWeatherLoaded(WeatherCurrent weatherCurrent) {
+                        assertThat(weatherCurrent.getTemperature()).isEqualTo(TEST_TEMPERATURE);
+                        assertThat(weatherCurrent.getLatitude()).isEqualTo(TEST_LATITUDE);
+                        assertThat(weatherCurrent.getLongitude()).isEqualTo(TEST_LONGITUDE);
+                        assertThat(weatherCurrent.getAddress()).isEqualTo(TEST_COUNTRY_NAME + ", "
+                                + TEST_ADMIN_AREA + ", " + TEST_SUB_ADMIN_AREA + ", "
+                                + TEST_LOCALITY);
+                    }
+
+                    @Override
+                    public void onError(Exception exception) {
+                    }
+                });
+    }
+
+    @Test
+    public void testGetCurrentWeatherForCurrentLocationGeocoderError() {
+        doAnswer(invocation -> {
+            ((LocationHelper.CurrentLocationCallback) invocation.getArguments()[0])
+                    .onCurrentLocationFound(testLocation);
+            return null;
+        }).when(locationHelper).getCurrentLocation(
+                any(LocationHelper.CurrentLocationCallback.class));
+        doAnswer(invocation -> {
+            ((WeatherCurrentDataLoader.WeatherCurrentCallback) invocation.getArguments()[2])
+                    .onWeatherEntityLoaded(weatherEntity);
+            return null;
+        }).when(dataLoader).loadCurrentWeatherByCoordinates(eq(TEST_LATITUDE), eq(TEST_LONGITUDE),
+                any(WeatherCurrentDataLoader.WeatherCurrentCallback.class));
+        doAnswer(invocation -> {
+            ((LocationHelper.ReverseGeocodeCallback) invocation.getArguments()[1])
+                    .onError(new LocationDeterminationException());
+            return null;
+        }).when(locationHelper).reverseGeocode(any(Location.class),
+                any(LocationHelper.ReverseGeocodeCallback.class));
         repository.getCurrentWeatherForCurrentLocation(
                 new WeatherRepository.WeatherCurrentCallback() {
                     @Override

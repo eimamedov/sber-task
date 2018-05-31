@@ -47,7 +47,7 @@ public class WeatherDataRepository implements WeatherRepository {
             @NonNull final WeatherCurrentCallback weatherCurrentCallback) {
         CurrentWeatherCurrentLocationCallback locationCallback =
                 new CurrentWeatherCurrentLocationCallback(weatherCurrentDataLoader,
-                        weatherCurrentCallback, dataMapper);
+                        locationHelper, weatherCurrentCallback, dataMapper);
         locationHelper.getCurrentLocation(locationCallback);
     }
 }

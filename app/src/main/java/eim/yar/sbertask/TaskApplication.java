@@ -1,6 +1,9 @@
 package eim.yar.sbertask;
 
 import android.app.Application;
+import android.location.Geocoder;
+
+import java.util.Locale;
 
 import eim.yar.sbertask.data.entity.mapper.WeatherEntityDataMapper;
 import eim.yar.sbertask.data.entity.mapper.WeatherEntityJsonMapper;
@@ -45,7 +48,8 @@ public class TaskApplication extends Application {
                 new OWMWeatherCurrentDataLoader(new OWMWeatherApi(this,
                         new WeatherEntityJsonMapper()));
         FineLocationHelper fineLocationHelper = new FineLocationHelper(
-                new FineCurrentLocationProvider(this));
+                new FineCurrentLocationProvider(this),
+                new Geocoder(this, Locale.getDefault()));
         weatherRepository = new WeatherDataRepository(owmWeatherCurrentDataLoader,
                 fineLocationHelper, new WeatherEntityDataMapper());
     }

@@ -19,9 +19,13 @@ public class WeatherEntityDataMapper {
         WeatherCurrent weatherCurrent = null;
         if (weatherEntity != null) {
             weatherCurrent = new WeatherCurrent();
-            weatherCurrent.setTemperature(weatherEntity.getMain().getTemperature());
-            weatherCurrent.setLatitude(weatherEntity.getCoord().getLat());
-            weatherCurrent.setLongitude(weatherEntity.getCoord().getLon());
+            if (weatherEntity.getMain() != null) {
+                weatherCurrent.setTemperature(weatherEntity.getMain().getTemperature());
+            }
+            if (weatherEntity.getCoord() != null) {
+                weatherCurrent.setLatitude(weatherEntity.getCoord().getLat());
+                weatherCurrent.setLongitude(weatherEntity.getCoord().getLon());
+            }
             weatherCurrent.setAddress(weatherEntity.getName());
         }
         return weatherCurrent;
