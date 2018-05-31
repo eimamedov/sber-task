@@ -22,4 +22,11 @@ public interface WeatherRepository {
      * @param weatherCurrentCallback an {@link WeatherCurrentCallback} to handle results
      */
     void getCurrentWeatherForCurrentLocation(WeatherCurrentCallback weatherCurrentCallback);
+
+    /**
+     * Get an {@link WeatherCurrent} by address.
+     * @param address string with address for looking for
+     * @param weatherCurrentCallback an {@link WeatherCurrentCallback} to handle results
+     */
+    void getCurrentWeatherByAddress(String address, WeatherCurrentCallback weatherCurrentCallback);
 }

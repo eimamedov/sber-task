@@ -124,7 +124,7 @@ public class WeatherDataRepositoryTest {
     }
 
     @Test
-    public void testGetCurrentWeatherForCurrentLocationGeocoderError() {
+    public void testGetCurrentWeatherForCurrentLocationGeocodeError() {
         doAnswer(invocation -> {
             ((LocationHelper.CurrentLocationCallback) invocation.getArguments()[0])
                     .onCurrentLocationFound(testLocation);
@@ -234,6 +234,77 @@ public class WeatherDataRepositoryTest {
                     @Override
                     public void onError(Exception exception) {
                         assertThat(exception).isInstanceOf(WeatherNotFoundException.class);
+                    }
+                });
+    }
+
+    @Test
+    public void testGetCurrentWeatherByAddressHappyCase() {
+        Address address = new Address(Locale.getDefault());
+        address.setLatitude(TEST_LATITUDE);
+        address.setLongitude(TEST_LONGITUDE);
+        List<Address> addresses = new ArrayList<>();
+        addresses.add(address);
+        doAnswer(invocation -> {
+            ((LocationHelper.GeocodeCallback) invocation.getArguments()[1])
+                    .onGeocodeFound(addresses);
+            return null;
+        }).when(locationHelper).geocode(any(String.class),
+                any(LocationHelper.GeocodeCallback.class));
+        doAnswer(invocation -> {
+            ((WeatherCurrentDataLoader.WeatherCurrentCallback) invocation.getArguments()[2])
+                    .onWeatherEntityLoaded(weatherEntity);
+            return null;
+        }).when(dataLoader).loadCurrentWeatherByCoordinates(eq(TEST_LATITUDE), eq(TEST_LONGITUDE),
+                any(WeatherCurrentDataLoader.WeatherCurrentCallback.class));
+        Address address2 = new Address(Locale.getDefault());
+        address2.setCountryName(TEST_COUNTRY_NAME);
+        address2.setAdminArea(TEST_ADMIN_AREA);
+        address2.setSubAdminArea(TEST_SUB_ADMIN_AREA);
+        address2.setLocality(TEST_LOCALITY);
+        List<Address> addresses2 = new ArrayList<>();
+        addresses2.add(address2);
+        doAnswer(invocation -> {
+            ((LocationHelper.ReverseGeocodeCallback) invocation.getArguments()[1])
+                    .onReverseGeocodeFound(addresses2);
+            return null;
+        }).when(locationHelper).reverseGeocode(any(Location.class),
+                any(LocationHelper.ReverseGeocodeCallback.class));
+        repository.getCurrentWeatherByAddress(TEST_NAME,
+                new WeatherRepository.WeatherCurrentCallback() {
+                    @Override
+                    public void onCurrentWeatherLoaded(WeatherCurrent weatherCurrent) {
+                        assertThat(weatherCurrent.getTemperature()).isEqualTo(TEST_TEMPERATURE);
+                        assertThat(weatherCurrent.getLatitude()).isEqualTo(TEST_LATITUDE);
+                        assertThat(weatherCurrent.getLongitude()).isEqualTo(TEST_LONGITUDE);
+                        assertThat(weatherCurrent.getAddress()).isEqualTo(TEST_COUNTRY_NAME + ", "
+                                + TEST_ADMIN_AREA + ", " + TEST_SUB_ADMIN_AREA + ", "
+                                + TEST_LOCALITY);
+                    }
+
+                    @Override
+                    public void onError(Exception exception) {
+                    }
+                });
+    }
+
+    @Test
+    public void testGetCurrentWeatherByAddressGeocodeError() {
+        doAnswer(invocation -> {
+            ((LocationHelper.GeocodeCallback) invocation.getArguments()[1])
+                    .onError(new LocationDeterminationException());
+            return null;
+        }).when(locationHelper).geocode(any(String.class),
+                any(LocationHelper.GeocodeCallback.class));
+        repository.getCurrentWeatherByAddress(TEST_NAME,
+                new WeatherRepository.WeatherCurrentCallback() {
+                    @Override
+                    public void onCurrentWeatherLoaded(WeatherCurrent weatherCurrent) {
+                    }
+
+                    @Override
+                    public void onError(Exception exception) {
+                        assertThat(exception).isInstanceOf(LocationDeterminationException.class);
                     }
                 });
     }

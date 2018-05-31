@@ -1,6 +1,9 @@
 package eim.yar.sbertask.data.repository;
 
+import android.location.Address;
 import android.support.annotation.NonNull;
+
+import java.util.List;
 
 import eim.yar.sbertask.data.entity.WeatherEntity;
 import eim.yar.sbertask.data.entity.mapper.WeatherEntityDataMapper;
@@ -49,5 +52,26 @@ public class WeatherDataRepository implements WeatherRepository {
                 new CurrentWeatherCurrentLocationCallback(weatherCurrentDataLoader,
                         locationHelper, weatherCurrentCallback, dataMapper);
         locationHelper.getCurrentLocation(locationCallback);
+    }
+
+    @Override
+    public void getCurrentWeatherByAddress(String address,
+            final WeatherCurrentCallback weatherCurrentCallback) {
+        CurrentWeatherDataLoaderCallback loaderCallback = new CurrentWeatherDataLoaderCallback(
+                locationHelper, weatherCurrentCallback, dataMapper);
+        locationHelper.geocode(address, new LocationHelper.GeocodeCallback() {
+
+            @Override
+            public void onGeocodeFound(List<Address> addresses) {
+                Address address = addresses.get(0);
+                weatherCurrentDataLoader.loadCurrentWeatherByCoordinates(address.getLatitude(),
+                        address.getLongitude(), loaderCallback);
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                weatherCurrentCallback.onError(exception);
+            }
+        });
     }
 }
