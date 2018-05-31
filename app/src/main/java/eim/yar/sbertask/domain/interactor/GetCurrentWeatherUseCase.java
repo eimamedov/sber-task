@@ -62,6 +62,14 @@ public abstract class GetCurrentWeatherUseCase {
     }
 
     /**
+     * Get {@link ThreadExecutor}.
+     * @return {@link ThreadExecutor}
+     */
+    public ThreadExecutor getThreadExecutor() {
+        return threadExecutor;
+    }
+
+    /**
      * Callback to handle weather repository data retrieving results.
      */
     protected final WeatherRepository.WeatherCurrentCallback repositoryCallback =

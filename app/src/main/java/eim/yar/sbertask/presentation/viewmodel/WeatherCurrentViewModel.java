@@ -29,7 +29,7 @@ public class WeatherCurrentViewModel {
     /**
      * Get current weather data for current location use case.
      */
-    private final GetCurrentWeatherForCurrentLocationUseCase currentWeatherForCurrentLocationUseCase;
+    final GetCurrentWeatherForCurrentLocationUseCase currentWeatherForCurrentLocationUseCase;
 
     /**
      * Construct a {@link WeatherCurrentViewModel}
@@ -67,21 +67,27 @@ public class WeatherCurrentViewModel {
     }
 
     public void onForCurrentLocationClick() {
-        progressVisibility.set(View.VISIBLE);
+        setProgressBarVisible(true);
         currentWeatherForCurrentLocationUseCase.execute(
             new GetCurrentWeatherUseCase.Callback() {
                 @Override
                 public void onCurrentWeatherLoaded(WeatherCurrent weatherCurrent) {
-                    progressVisibility.set(View.INVISIBLE);
+                    setProgressBarVisible(!currentWeatherForCurrentLocationUseCase
+                            .getThreadExecutor().isRunning());
                     updateWeatherCurrentDataFields(weatherCurrent);
                 }
 
                 @Override
                 public void onError(Exception exception) {
-                    progressVisibility.set(View.INVISIBLE);
+                    setProgressBarVisible(!currentWeatherForCurrentLocationUseCase
+                            .getThreadExecutor().isRunning());
                     updateErrorMessageField(exception);
                 }
             });
+    }
+
+    void setProgressBarVisible(boolean visible) {
+        progressVisibility.set(visible ? View.VISIBLE : View.INVISIBLE);
     }
 
     void updateWeatherCurrentDataFields(WeatherCurrent weatherCurrent) {

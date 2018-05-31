@@ -14,4 +14,10 @@ public interface ThreadExecutor {
      * @param runnable The class that implements {@link Runnable} interface.
      */
     void execute(Runnable runnable);
+
+    /**
+     * Is thread executor running.
+     * @return true if thread executor is running
+     */
+    boolean isRunning();
 }
