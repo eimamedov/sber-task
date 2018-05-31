@@ -45,6 +45,12 @@ public class WeatherEntity {
     @Expose
     private Integer cod;
 
+    private Long timestamp;
+
+    public WeatherEntity() {
+        timestamp = System.currentTimeMillis();
+    }
+
     public Coord getCoord() {
         return coord;
     }
@@ -141,4 +147,11 @@ public class WeatherEntity {
         this.cod = cod;
     }
 
+    public Long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
+    }
 }

@@ -4,6 +4,11 @@ import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.view.View;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import eim.yar.sbertask.domain.interactor.GetCurrentWeatherForCurrentLocationUseCase;
 import eim.yar.sbertask.domain.interactor.GetCurrentWeatherUseCase;
 import eim.yar.sbertask.domain.model.WeatherCurrent;
@@ -19,6 +24,8 @@ public class WeatherCurrentViewModel {
     final ObservableField<String> latitude = new ObservableField<>();
 
     final ObservableField<String> longitude = new ObservableField<>();
+
+    final ObservableField<String> datetime = new ObservableField<>();
 
     final ObservableField<String> temperature = new ObservableField<>();
 
@@ -54,6 +61,10 @@ public class WeatherCurrentViewModel {
         return longitude;
     }
 
+    public ObservableField<String> getDatetime() {
+        return datetime;
+    }
+
     public ObservableField<String> getTemperature() {
         return temperature;
     }
@@ -72,14 +83,14 @@ public class WeatherCurrentViewModel {
             new GetCurrentWeatherUseCase.Callback() {
                 @Override
                 public void onCurrentWeatherLoaded(WeatherCurrent weatherCurrent) {
-                    setProgressBarVisible(!currentWeatherForCurrentLocationUseCase
+                    setProgressBarVisible(currentWeatherForCurrentLocationUseCase
                             .getThreadExecutor().isRunning());
                     updateWeatherCurrentDataFields(weatherCurrent);
                 }
 
                 @Override
                 public void onError(Exception exception) {
-                    setProgressBarVisible(!currentWeatherForCurrentLocationUseCase
+                    setProgressBarVisible(currentWeatherForCurrentLocationUseCase
                             .getThreadExecutor().isRunning());
                     updateErrorMessageField(exception);
                 }
@@ -94,6 +105,9 @@ public class WeatherCurrentViewModel {
         address.set(weatherCurrent.getAddress());
         latitude.set(Double.toString(weatherCurrent.getLatitude()));
         longitude.set(Double.toString(weatherCurrent.getLongitude()));
+        DateFormat dateFormat = SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.MEDIUM,
+                SimpleDateFormat.MEDIUM, Locale.getDefault());
+        datetime.set(dateFormat.format(new Date(weatherCurrent.getTimestamp())));
         temperature.set(Double.toString(weatherCurrent.getTemperature()));
     }
 

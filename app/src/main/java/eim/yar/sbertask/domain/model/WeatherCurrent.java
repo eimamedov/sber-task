@@ -14,6 +14,8 @@ public class WeatherCurrent {
 
     private String address;
 
+    private Long timestamp;
+
     public Double getTemperature() {
         return temperature;
     }
@@ -44,5 +46,13 @@ public class WeatherCurrent {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public Long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
     }
 }

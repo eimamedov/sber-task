@@ -24,25 +24,26 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{weatherCurrent.address}"/>
 
             <TextView
-                android:id="@+id/latitude"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{weatherCurrent.latitude}"/>
 
             <TextView
-                android:id="@+id/longitude"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{weatherCurrent.longitude}"/>
 
             <TextView
-                android:id="@+id/temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{weatherCurrent.datetime}"/>
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{weatherCurrent.temperature}"/>
@@ -50,7 +51,6 @@
         </LinearLayout>
 
         <ProgressBar
-            android:id="@+id/progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="@{weatherCurrent.progressVisibility}"/>

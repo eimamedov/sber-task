@@ -27,6 +27,7 @@ public class WeatherEntityDataMapper {
                 weatherCurrent.setLongitude(weatherEntity.getCoord().getLon());
             }
             weatherCurrent.setAddress(weatherEntity.getName());
+            weatherCurrent.setTimestamp(weatherEntity.getTimestamp());
         }
         return weatherCurrent;
     }
