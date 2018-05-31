@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Current Weather</string>
+    <string name="search">Search</string>
     <string name="for_current_location">For current location</string>
 </resources>

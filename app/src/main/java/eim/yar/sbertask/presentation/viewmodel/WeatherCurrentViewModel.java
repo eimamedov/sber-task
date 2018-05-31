@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import eim.yar.sbertask.domain.interactor.GetCurrentWeatherByAddressUseCase;
 import eim.yar.sbertask.domain.interactor.GetCurrentWeatherForCurrentLocationUseCase;
 import eim.yar.sbertask.domain.interactor.GetCurrentWeatherUseCase;
 import eim.yar.sbertask.domain.model.WeatherCurrent;
@@ -31,6 +32,8 @@ public class WeatherCurrentViewModel {
 
     final ObservableInt progressVisibility = new ObservableInt();
 
+    final ObservableField<String> addressSearch = new ObservableField<>();
+
     final ObservableField<String> error = new ObservableField<>();
 
     /**
@@ -39,13 +42,21 @@ public class WeatherCurrentViewModel {
     final GetCurrentWeatherForCurrentLocationUseCase currentWeatherForCurrentLocationUseCase;
 
     /**
+     * Get current weather data by address use case.
+     */
+    final GetCurrentWeatherByAddressUseCase currentWeatherByAddressUseCase;
+
+    /**
      * Construct a {@link WeatherCurrentViewModel}
      * @param currentWeatherForCurrentLocationUseCase use case to get current weather data for
-     * current location.
+     * current location
+     * @param currentWeatherByAddressUseCase use case to get current weather data for by address
      */
     public WeatherCurrentViewModel(
-            GetCurrentWeatherForCurrentLocationUseCase currentWeatherForCurrentLocationUseCase) {
+            GetCurrentWeatherForCurrentLocationUseCase currentWeatherForCurrentLocationUseCase,
+            GetCurrentWeatherByAddressUseCase currentWeatherByAddressUseCase) {
         this.currentWeatherForCurrentLocationUseCase = currentWeatherForCurrentLocationUseCase;
+        this.currentWeatherByAddressUseCase = currentWeatherByAddressUseCase;
         progressVisibility.set(View.INVISIBLE);
     }
 
@@ -73,28 +84,42 @@ public class WeatherCurrentViewModel {
         return progressVisibility;
     }
 
+    public ObservableField<String> getAddressSearch() {
+        return addressSearch;
+    }
+
     public ObservableField<String> getError() {
         return error;
     }
 
     public void onForCurrentLocationClick() {
+        addressSearch.set("");
         setProgressBarVisible(true);
         currentWeatherForCurrentLocationUseCase.execute(
-            new GetCurrentWeatherUseCase.Callback() {
-                @Override
-                public void onCurrentWeatherLoaded(WeatherCurrent weatherCurrent) {
-                    setProgressBarVisible(currentWeatherForCurrentLocationUseCase
-                            .getThreadExecutor().isRunning());
-                    updateWeatherCurrentDataFields(weatherCurrent);
-                }
+                createUseCaseCallback(currentWeatherForCurrentLocationUseCase));
+    }
 
-                @Override
-                public void onError(Exception exception) {
-                    setProgressBarVisible(currentWeatherForCurrentLocationUseCase
-                            .getThreadExecutor().isRunning());
-                    updateErrorMessageField(exception);
-                }
-            });
+    public void onByAddressSearchClick(View view) {
+        setProgressBarVisible(true);
+        currentWeatherByAddressUseCase.execute(addressSearch.get(),
+                createUseCaseCallback(currentWeatherByAddressUseCase));
+    }
+
+    private GetCurrentWeatherUseCase.Callback createUseCaseCallback(
+            final GetCurrentWeatherUseCase useCase) {
+        return new GetCurrentWeatherUseCase.Callback() {
+            @Override
+            public void onCurrentWeatherLoaded(WeatherCurrent weatherCurrent) {
+                setProgressBarVisible(useCase.getThreadExecutor().isRunning());
+                updateWeatherCurrentDataFields(weatherCurrent);
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                setProgressBarVisible(useCase.getThreadExecutor().isRunning());
+                updateErrorMessageField(exception);
+            }
+        };
     }
 
     void setProgressBarVisible(boolean visible) {

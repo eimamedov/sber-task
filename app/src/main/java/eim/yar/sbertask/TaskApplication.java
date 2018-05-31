@@ -13,6 +13,7 @@ import eim.yar.sbertask.data.net.OWMWeatherApi;
 import eim.yar.sbertask.data.repository.WeatherDataRepository;
 import eim.yar.sbertask.data.repository.dataloader.OWMWeatherCurrentDataLoader;
 import eim.yar.sbertask.data.repository.locationhelper.FineLocationHelper;
+import eim.yar.sbertask.domain.interactor.GetCurrentWeatherByAddressUseCase;
 import eim.yar.sbertask.domain.interactor.GetCurrentWeatherForCurrentLocationUseCase;
 import eim.yar.sbertask.domain.repository.WeatherRepository;
 import eim.yar.sbertask.presentation.executor.UIThread;
@@ -61,8 +62,12 @@ public class TaskApplication extends Application {
         GetCurrentWeatherForCurrentLocationUseCase getCurrentWeatherForCurrentLocationUseCase =
                 new GetCurrentWeatherForCurrentLocationUseCase(weatherRepository,
                         JobExecutor.getInstance(), UIThread.getInstance());
+        GetCurrentWeatherByAddressUseCase getCurrentWeatherByAddressUseCase =
+                new GetCurrentWeatherByAddressUseCase(weatherRepository,
+                        JobExecutor.getInstance(), UIThread.getInstance());
         weatherCurrentViewModel = new WeatherCurrentViewModel(
-                getCurrentWeatherForCurrentLocationUseCase);
+                getCurrentWeatherForCurrentLocationUseCase,
+                getCurrentWeatherByAddressUseCase);
     }
 
     /**
