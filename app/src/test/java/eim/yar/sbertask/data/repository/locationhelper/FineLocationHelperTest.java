@@ -100,6 +100,74 @@ public class FineLocationHelperTest {
     }
 
     @Test
+    public void testGeocodeHappyCase() {
+        Address address = new Address(Locale.getDefault());
+        address.setLatitude(TEST_LATITUDE);
+        address.setLongitude(TEST_LONGITUDE);
+        List<Address> addresses = new ArrayList<>();
+        addresses.add(address);
+        try {
+            doReturn(addresses).when(geocoder).getFromLocationName(any(String.class),
+                    any(Integer.class));
+            locationHelper.geocode(TEST_COUNTRY_NAME, new LocationHelper.GeocodeCallback() {
+                @Override
+                public void onGeocodeFound(List<Address> addresses) {
+                    assertThat(addresses.size()).isEqualTo(1);
+                    assertThat(addresses.get(0).getLatitude()).isEqualTo(TEST_LATITUDE);
+                    assertThat(addresses.get(0).getLongitude()).isEqualTo(TEST_LONGITUDE);
+                }
+
+                @Override
+                public void onError(Exception exception) {
+                }
+            });
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testGeocodeNullAddresses() {
+        try {
+            doReturn(null).when(geocoder).getFromLocationName(any(String.class),
+                    any(Integer.class));
+            locationHelper.geocode(TEST_COUNTRY_NAME, new LocationHelper.GeocodeCallback() {
+                @Override
+                public void onGeocodeFound(List<Address> addresses) {
+                }
+
+                @Override
+                public void onError(Exception exception) {
+                    assertThat(exception).isInstanceOf(LocationDeterminationException.class);
+                    assertThat(exception.getMessage()).isEqualToIgnoringCase("Geocode not found");
+                }
+            });
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testGeocodeThrowException() {
+        try {
+            doThrow(new IOException()).when(geocoder).getFromLocationName(any(String.class),
+                    any(Integer.class));
+            locationHelper.geocode(TEST_COUNTRY_NAME, new LocationHelper.GeocodeCallback() {
+                @Override
+                public void onGeocodeFound(List<Address> addresses) {
+                }
+
+                @Override
+                public void onError(Exception exception) {
+                    assertThat(exception).isInstanceOf(IOException.class);
+                }
+            });
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    @Test
     public void testReverseGeocodeHappyCase() {
         Address address = new Address(Locale.getDefault());
         address.setCountryName(TEST_COUNTRY_NAME);

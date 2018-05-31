@@ -62,6 +62,21 @@ public class FineLocationHelper implements LocationHelper {
     }
 
     @Override
+    public void geocode(String address, GeocodeCallback callback) {
+        try  {
+            List<Address> addresses = geocoder.getFromLocationName(address, 10);
+            if (addresses == null || addresses.isEmpty()) {
+                callback.onError(new LocationDeterminationException(
+                        "Geocode not found"));
+            } else {
+                callback.onGeocodeFound(addresses);
+            }
+        } catch (IOException exception)  {
+            callback.onError(exception);
+        }
+    }
+
+    @Override
     public void reverseGeocode(Location location, ReverseGeocodeCallback callback) {
         try  {
             List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),

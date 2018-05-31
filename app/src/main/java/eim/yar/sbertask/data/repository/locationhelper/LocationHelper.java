@@ -26,6 +26,22 @@ public interface LocationHelper {
      */
     void getCurrentLocation(CurrentLocationCallback currentLocationCallback);
 
+    /**
+     * Callback to be notified when geocode results found for a location.
+     */
+    interface GeocodeCallback {
+
+        void onGeocodeFound(List<Address> addresses);
+
+        void onError(Exception exception);
+    }
+
+    /**
+     * Geocode for an address.
+     * @param address an address to find location for
+     * @param callback {@link GeocodeCallback} to handle results
+     */
+    void geocode(String address, GeocodeCallback callback);
 
     /**
      * Callback to be notified when reverse geocode results found for a location.
